@@ -1,47 +1,26 @@
-import { readContentFile } from "../lib/content";
-import { parseMarkdownTable, splitBySections } from "../lib/table";
+import { getProjects, getLocations } from "../lib/store";
 
-function countLocationsShot(): { shot: number; total: number } {
-  const md = readContentFile("location-library.md");
-  const sections = splitBySections(md).filter((s) =>
-    /Beach|Temple|Waterfall|Jungle/.test(s.title)
-  );
-  let shot = 0;
-  let total = 0;
-  for (const section of sections) {
-    const { rows } = parseMarkdownTable(section.body);
-    for (const row of rows) {
-      const shotCell = row[2] ?? "";
-      if (shotCell.trim().length > 0) total += 1;
-      if (/\[x\]/i.test(shotCell)) shot += 1;
-    }
+export const dynamic = "force-dynamic";
+
+export default async function OverviewPage() {
+  const [projects, locations] = await Promise.all([getProjects(), getLocations()]);
+
+  const stageCounts: Record<string, number> = {};
+  for (const p of projects) {
+    stageCounts[p.stage] = (stageCounts[p.stage] ?? 0) + 1;
   }
-  return { shot, total };
-}
+  const totalVideos = projects.length;
 
-function countVideosByStage(): Record<string, number> {
-  const md = readContentFile("content-calendar.md");
-  const { rows } = parseMarkdownTable(md);
-  const counts: Record<string, number> = {};
-  for (const row of rows) {
-    const stage = (row[2] ?? "Unknown").trim();
-    if (!stage) continue;
-    counts[stage] = (counts[stage] ?? 0) + 1;
-  }
-  return counts;
-}
-
-export default function OverviewPage() {
-  const { shot, total } = countLocationsShot();
-  const stageCounts = countVideosByStage();
-  const totalVideos = Object.values(stageCounts).reduce((a, b) => a + b, 0);
+  const shot = locations.reduce((sum, c) => sum + c.sites.filter((s) => s.shot).length, 0);
+  const total = locations.reduce((sum, c) => sum + c.sites.length, 0);
 
   return (
     <div className="shell">
       <h1>Jungle Nidra — Production Overview</h1>
       <p>
-        View-only snapshot of the manufacturing line. Edit the actual files via
-        Claude Code or GitHub — this page just reads them.
+        Live snapshot of the workbench. Project and location data lives in Blob storage —
+        edit it from <a href="/projects">/projects</a>, not here. The Brand/SOP/Todo pages
+        still read from git, edited via Claude Code or GitHub.
       </p>
 
       <div className="grid">
@@ -63,7 +42,7 @@ export default function OverviewPage() {
 
       <h2>Videos by stage</h2>
       {totalVideos === 0 ? (
-        <p>No videos tracked yet — check <a href="/calendar">the calendar</a>.</p>
+        <p>No videos tracked yet — create one on <a href="/projects">/projects</a>.</p>
       ) : (
         <div className="grid">
           {Object.entries(stageCounts).map(([stage, count]) => (
@@ -80,7 +59,7 @@ export default function OverviewPage() {
         <p>
           <a href="/projects">Projects</a> — the workbench: create/track videos, upload
           footage &nbsp;·&nbsp; <a href="/calendar">Content calendar</a> — every video's
-          stage (static record) &nbsp;·&nbsp; <a href="/locations">Location library</a> —
+          stage, table view &nbsp;·&nbsp; <a href="/locations">Location library</a> —
           40-site shoot tracker &nbsp;·&nbsp; <a href="/brand">Brand guide</a> — palette +
           imagery rules &nbsp;·&nbsp; <a href="/sop">SOP</a> — the full production workflow
           &nbsp;·&nbsp; <a href="/todo">Todo</a> — system build log

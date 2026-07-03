@@ -24,6 +24,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   if (typeof body.stage === "string") project.stage = body.stage;
   if (typeof body.notes === "string") project.notes = body.notes;
   if (typeof body.targetDay === "string") project.targetDay = body.targetDay;
+  if (typeof body.publishUrl === "string" && body.publishUrl.trim()) {
+    project.publishUrl = body.publishUrl.trim();
+    if (!project.publishedAt) project.publishedAt = new Date().toISOString();
+    project.stage = "Uploaded";
+  }
   project.updatedAt = new Date().toISOString();
   projects[idx] = project;
 

@@ -1,7 +1,15 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
 import { auth } from "../../../lib/auth";
-import { getProjects, saveProjects, Asset } from "../../../lib/store";
+import {
+  getProjects,
+  saveProjects,
+  getLocations,
+  saveLocations,
+  markSiteShot,
+  stageIndex,
+  Asset,
+} from "../../../lib/store";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const session = await auth();
@@ -41,9 +49,24 @@ export async function POST(request: Request): Promise<NextResponse> {
           uploadedAt: new Date().toISOString(),
         };
 
-        projects[idx].assets.push(asset);
-        projects[idx].updatedAt = new Date().toISOString();
+        const project = projects[idx];
+        project.assets.push(asset);
+
+        // Auto stage-transition: first asset landing means filming has started.
+        if (stageIndex(project.stage) < stageIndex("Shooting")) {
+          project.stage = "Shooting";
+        }
+
+        project.updatedAt = new Date().toISOString();
         await saveProjects(projects);
+
+        // Auto-checkoff: mark the matching site as shot in the location library.
+        if (siteName) {
+          const locations = await getLocations();
+          if (markSiteShot(locations, siteName)) {
+            await saveLocations(locations);
+          }
+        }
       },
     });
 

@@ -148,12 +148,44 @@ feature add) — the site's job is the workflow and assets around it.
 - [x] Removed the temporary error-detail exposure from `/api/projects` POST (was added
       briefly to debug live, replaced with server-side `console.error` + a generic
       client-facing message).
-- [ ] `content-calendar.md` and `/projects` are currently two separate records (markdown
-      file vs. Blob-backed JSON) — not reconciled yet. Decide later whether `/projects`
-      becomes the sole source of truth for stage-tracking, or they stay intentionally
-      separate (calendar = git-visible snapshot, projects = live working tool).
 - [ ] Phase 2 (not built): trigger `jn-production-line`/`jn-repurposing` generation
       directly from the site via the Claude API, instead of through Claude Code chat.
+      Biggest remaining "leave the site to use Claude Code chat" seam — deliberately not
+      started yet since it needs a scoping conversation (API cost, how much mid-generation
+      editing to allow) before building.
+
+## Branch 7 — Seamless-workflow gaps — started 2026-07-03
+
+Four gaps identified when reviewing the full system end to end. All four are being
+closed by making `/projects` (Blob-backed) the one live record, with git-tracked
+markdown files becoming historical snapshots rather than something read live.
+
+- [x] **Two sources of truth**: `/calendar` now reads live from `getProjects()` (Blob),
+      table-formatted, instead of parsing `content-calendar.md`. The real waterfall video
+      was seeded into Blob via the API (`anxiety-relief-waterfall-journey`, stage
+      `Scripted`, notes carried over) so nothing was lost. `content-calendar.md` marked
+      superseded in-file, kept as a snapshot.
+- [x] **No auto stage-transitions**: `onUploadCompleted` in `/api/upload` now bumps the
+      stage to "Shooting" if the project is still earlier than that when the first asset
+      lands (`stageIndex()` helper added to `lib/store.ts`).
+- [x] **No publish/export tracking**: `Project` gained `publishUrl`/`publishedAt`. New
+      `PublishForm` component on the project page — pasting a YouTube link auto-sets the
+      stage to "Uploaded" and records the timestamp. `PATCH /api/projects/[slug]` handles it.
+- [x] **Location library disconnected from uploads**: added `data/locations.json` in Blob
+      (`getLocations`/`saveLocations`/`markSiteShot` in `lib/store.ts`), lazy-seeded from the
+      original 40-site list on first read. `/locations` now reads live. Upload handler
+      case-insensitively matches the typed site name and marks it shot automatically.
+      `location-library.md` marked superseded in-file, kept as the original seed.
+- [x] Also updated `/` (Overview) to pull its stats from the same live Blob data instead of
+      parsing markdown, for consistency. Removed `lib/table.ts` (no longer used by anything
+      once calendar/locations stopped parsing markdown tables) and trimmed
+      `copy-content.js` to only the files still read live (brand guide, SOP, todo).
+- [x] Verified via curl against the live site: seeded the waterfall project (confirms
+      `/calendar` will show it), `GET /api/locations` reachable. **Not yet verified**: the
+      upload-triggered behaviors (auto stage-transition, auto site-checkoff) — these need a
+      real file upload through the browser UI to confirm, since Vercel Blob's client-upload
+      callback can't be easily faked via curl. Eli should spot-check these on the next real
+      upload.
 
 ## Later (once channel has traction — not now)
 

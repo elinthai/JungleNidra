@@ -1,4 +1,10 @@
-# Content Calendar — Jungle Nidra
+# Content Calendar — Jungle Nidra (superseded — see note)
+
+> **This file stopped being the live record on 2026-07-03.** The dashboard's
+> `/calendar` page now reads live from the Projects Blob store instead of this
+> file, and `/projects` is where stages actually get updated. This file is kept
+> as a point-in-time snapshot from before that switch — don't hand-edit it
+> expecting it to show up on the dashboard anymore.
 
 Tracks every video's progress through the line. No fixed lead-time rule yet (staying
 flexible until there's real pacing data from a few videos) — update this as each video

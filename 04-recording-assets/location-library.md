@@ -1,4 +1,10 @@
-# B-roll Location Library — Koh Samui, Thailand
+# B-roll Location Library — Koh Samui, Thailand (superseded — see note)
+
+> **This file stopped being the live record on 2026-07-03.** The dashboard's
+> `/locations` page now reads live from Blob storage, and checking a site off
+> happens automatically when you upload footage labeled with that site's name
+> on a project. This file is kept as the original seed list, not hand-edited
+> for check-offs anymore.
 
 40 sites, 10 per category. Fill in check-off once the 4-shot set (see
 `PRODUCTION-SOP.md` Part 1) has been captured. Raw footage for each site lives at

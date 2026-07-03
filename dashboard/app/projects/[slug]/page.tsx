@@ -3,6 +3,7 @@ import StageSelector from "./StageSelector";
 import UploadForm from "./UploadForm";
 import NotesEditor from "./NotesEditor";
 import DeleteButton from "./DeleteButton";
+import PublishForm from "./PublishForm";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -86,6 +87,13 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
       <h2>Notes</h2>
       <NotesEditor slug={project.slug} notes={project.notes} />
+
+      <h2>Publish</h2>
+      <PublishForm
+        slug={project.slug}
+        publishUrl={project.publishUrl}
+        publishedAt={project.publishedAt}
+      />
 
       <div style={{ marginTop: 32 }}>
         <DeleteButton slug={project.slug} />

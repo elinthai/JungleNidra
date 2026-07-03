@@ -7,16 +7,14 @@ const path = require("path");
 const repoRoot = path.join(__dirname, "..", "..");
 const contentDir = path.join(__dirname, "..", "content");
 
+// content-calendar.md and location-library.md are no longer read live by the
+// dashboard (see /calendar and /locations, which now read from Blob storage
+// instead) -- not copied here anymore. Still in git as point-in-time snapshots.
 const files = [
-  { src: "content-calendar.md", dest: "content-calendar.md" },
   { src: "todo.md", dest: "todo.md" },
   { src: "SOP.md", dest: "sop.md" },
   { src: "PRODUCTION-SOP.md", dest: "production-sop.md" },
   { src: path.join("brand-assets", "brand-guide.md"), dest: "brand-guide.md" },
-  {
-    src: path.join("04-recording-assets", "location-library.md"),
-    dest: "location-library.md",
-  },
 ];
 
 fs.mkdirSync(contentDir, { recursive: true });
