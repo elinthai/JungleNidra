@@ -23,8 +23,11 @@ This tracks what's left to wire up, plus the next branches of the system.
 - [x] Filled in `PRODUCTION-SOP.md` (2026-07-03): beginner-friendly 4-shot filming checklist for the
       40-site Koh Samui location library (iPhone 15 + lapel mic + tripod + gimbal), ElevenLabs setting
       guidance for the cloned/stable voice, CapCut silence-gap + template-build plan (first video builds
-      the template), and recommended export settings. Added `04-recording-assets/location-library.md`
-      to track the 40 sites (10 each: beach/temple/jungle/shala) — site names still need to be filled in.
+      the template), and recommended export settings.
+- [x] Populated `04-recording-assets/location-library.md` with Eli's real site list (2026-07-03) —
+      categories are actually Beach/Temple/Waterfall/Jungle, not Beach/Temple/Jungle/Shala as originally
+      planned; updated `PRODUCTION-SOP.md` to match.
+- [ ] Jungle category is 6 of 10 — need 4 more jungle sites from Eli to complete the library.
 - [ ] Run one real input through `/jn-production-line` end to end to sanity-check the approval pause
       and file-saving behavior before relying on it for the next Tue/Thu upload.
 

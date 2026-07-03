@@ -10,11 +10,11 @@ becomes a fixed checklist you run per video instead of re-deciding each time.
 ## Part 1 — B-roll shoot (nature/ambient, no people)
 
 **Location library**: 40 sites across Koh Samui, Thailand — 10 each of Beach, Temple,
-Jungle, and Yoga/Meditation Shala. Tracked in `04-recording-assets/location-library.md`.
-Pull the visual metaphor from the approved thumbnail concept
-(`02-packaging/thumbnails/[slug].md`) and pick the matching location category —
-e.g. a "deep water / calm" theme pulls from Beach, a "grounding / ancient wisdom" theme
-pulls from Temple.
+Waterfall, and Jungle (Jungle currently has 6 of 10 confirmed). Tracked in
+`04-recording-assets/location-library.md`. Pull the visual metaphor from the approved
+thumbnail concept (`02-packaging/thumbnails/[slug].md`) and pick the matching location
+category — e.g. a "deep water / calm" theme pulls from Beach, a "grounding / ancient
+wisdom" theme pulls from Temple, a "release / renewal" theme pulls from Waterfall.
 
 **Gear**: iPhone 15, lapel mic, tripod, gimbal.
 
@@ -33,7 +33,7 @@ Camera setup, once per shoot day:
 Per location, capture this same 4-shot set every time (repeatable = consistent b-roll
 library, and it's enough variety to cut a full video from one site):
 1. **Wide establishing shot** — tripod, static, 15-20 sec. Shows the full scene
-   (the beach, the temple courtyard, the jungle canopy, the shala interior).
+   (the beach, the temple courtyard, the waterfall pool, the jungle canopy).
 2. **Slow push-in** — gimbal, very slow walk or gimbal-arm push toward a focal point
    (a wave, a statue, a leaf, a candle), 15-20 sec. This is your most-used "hold" shot
    under narration — shoot it slower than feels natural, it always looks too fast in
