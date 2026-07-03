@@ -34,6 +34,10 @@ export async function POST(request: NextRequest) {
     updatedAt: now,
   };
   projects.push(project);
-  await saveProjects(projects);
+  try {
+    await saveProjects(projects);
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+  }
   return NextResponse.json(project, { status: 201 });
 }
