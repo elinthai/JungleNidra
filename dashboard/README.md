@@ -6,14 +6,18 @@ View-only dashboard for the production system — reads `content-calendar.md`,
 renders them. It doesn't edit anything — the files stay the source of truth,
 edited via Claude Code or GitHub as usual.
 
-Password-protected (single shared password via the `DASHBOARD_PASSWORD` env var,
-checked in `middleware.ts`) since this shows real business details.
+**Currently public — no password gate.** The password-gate code (`app/login/`,
+`app/api/login/`) is still in the repo but unenforced since `middleware.ts` was
+removed (2026-07-03, the env var wasn't taking effect on Vercel and Eli chose to drop
+it for now rather than keep debugging). The dashboard shows real business details
+(revenue plans, unreleased titles/scripts) — revisit adding real auth before treating
+this as more than a personal/low-traffic tool. To re-enable the old single-password
+gate, restore `middleware.ts` (see git history) and set `DASHBOARD_PASSWORD` in Vercel.
 
 ## Local development
 
 ```
 npm install
-cp .env.local.example .env.local   # then edit the password
 npm run dev
 ```
 

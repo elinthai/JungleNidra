@@ -89,17 +89,18 @@ This tracks what's left to wire up, plus the next branches of the system.
       View-only by design (per Eli's call) — the markdown files stay the source of truth.
 - [x] Pages: Overview (stats), Calendar, Locations (progress bars per category), Brand
       (palette swatches + guide), SOP, Todo.
-- [x] Password-protected via `DASHBOARD_PASSWORD` env var + Next.js middleware — a single
-      shared-password gate, not full auth (per Eli's call, appropriate for a one-person
-      dashboard with real business details).
 - [x] Verified locally: build succeeds, login sets the cookie, all pages render real repo
       content correctly (calendar shows the waterfall video, locations shows Na Muang 1, etc).
-- [ ] Not yet deployed to Vercel — needs Eli to import the GitHub repo at vercel.com/new
-      (Root Directory = `dashboard`, env var `DASHBOARD_PASSWORD` set), since deployment
-      requires Eli's Vercel account. See `dashboard/README.md` for exact steps.
-- [ ] Once deployed: every push to `main` auto-redeploys, so routine content edits (new
-      calendar rows, checked-off locations) show up on the next deploy with zero dashboard
-      code changes.
+- [x] Deployed to Vercel (2026-07-03) — Root Directory set to `dashboard`, Framework Preset
+      manually set to Next.js (didn't auto-detect on first deploy, causing a "no public
+      directory" build failure — fixed once set explicitly).
+- [x] Password gate (`DASHBOARD_PASSWORD` env var + `middleware.ts`) removed 2026-07-03 —
+      the env var wasn't taking effect after a couple of redeploy attempts, and Eli chose to
+      go public rather than keep debugging. **Dashboard is currently public — no auth.**
+      Login code still in the repo (unused) if auth gets revisited later. Real business
+      details (revenue plans, unreleased titles/scripts) are visible to anyone with the URL.
+- [ ] Every push to `main` auto-redeploys, so routine content edits (new calendar rows,
+      checked-off locations) show up on the next deploy with zero dashboard code changes.
 
 ## Later (once channel has traction — not now)
 
