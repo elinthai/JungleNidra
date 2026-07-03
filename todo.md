@@ -49,12 +49,16 @@ This tracks what's left to wire up, plus the next branches of the system.
 - [ ] Decide if Jungle Nidra cross-posts anywhere else (Spotify/Insight Timer for audio-only sleep
       tracks is common for this niche) — if yes, add a distribution checklist per platform.
 
-## Branch 3 — Content calendar
+## Branch 3 — Content calendar — built 2026-07-03
 
-- [ ] New file: `content-calendar.md` or a simple CSV/table — columns: working title, stage
-      (idea/scripted/recording/uploaded), target day (Tue/Thu), status.
-- [ ] Seed it from whatever is already sitting in `01-ideas/` and `03-scripts/`.
-- [ ] Decide cadence rule: does every Tue/Thu slot need an idea locked 1 week ahead?
+- [x] New file: `content-calendar.md` — columns: slug, working title, stage, target day, status/notes.
+      Stages match `SOP.md` exactly: Idea → Packaged → Scripted → Shooting → Editing → Repurposing →
+      Uploaded → Reviewed.
+- [x] Seeded with `anxiety-relief-waterfall-journey` (currently at Scripted, awaiting shoot).
+- [x] Cadence rule: staying flexible for now (Eli's call) — no fixed 1-week-ahead lock. Revisit once
+      a few videos have gone through and real pacing is known.
+- [ ] Remember to update `content-calendar.md` by hand as videos move through stages — nothing
+      auto-updates it yet.
 
 ## Branch 4 — Brand asset library
 
