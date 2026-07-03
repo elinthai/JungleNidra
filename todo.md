@@ -9,8 +9,22 @@ This tracks what's left to wire up, plus the next branches of the system.
       are the real, anonymized Jungle Nidra versions (no face, no cross-brand links, calm tone).
 - [x] Replaced `.claude/skills/lite-cge-*` with `jn_skills/*` (2026-07-03) — jn skills now trigger
       automatically as project skills.
-- [ ] Re-save any outputs already produced with the generic skills — check if titles/thumbnails/scripts
-      made so far need a brand-guardrail pass (no face, no cross-brand mentions).
+- [x] Starting clean from the next upload — no retro-fit needed for prior generic outputs.
+- [x] Repo pushed to GitHub: github.com/elinthai/JungleNidra (2026-07-03). Vercel deferred until
+      there's an actual UI to host (e.g. content calendar dashboard).
+
+## Branch 0.5 — Manufacturing line (input populator + production SOP) — built 2026-07-03
+
+- [x] `jn-production-line` skill: takes one input → packages it (title/thumbnail/opening lines) →
+      pauses for approval → writes the full script → auto-saves both under a shared filename slug
+      across `02-packaging/` and `03-scripts/`. This is now the default Stage 2+3 entry point in `SOP.md`.
+- [x] `PRODUCTION-SOP.md`: Stage 4 runbook covering the b-roll shoot (nature/ambient, no people) and the
+      digital pipeline (ElevenLabs narration → CapCut edit → soundscape → export/QC).
+- [ ] Fill in the `[FILL IN]` markers in `PRODUCTION-SOP.md`: shoot location, camera gear, shot-list
+      convention, ElevenLabs voice ID + stability/style settings, CapCut template location, silence-gap
+      method, export settings. Once filled, this becomes a fixed per-video checklist.
+- [ ] Run one real input through `/jn-production-line` end to end to sanity-check the approval pause
+      and file-saving behavior before relying on it for the next Tue/Thu upload.
 
 ## Branch 2 — Repurposing / distribution
 

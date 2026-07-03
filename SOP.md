@@ -11,21 +11,22 @@ the next stage. Every skill enforces the channel's anonymity guardrails automati
 | # | Stage | Skill to invoke | Input | Save output to |
 |---|-------|------------------|-------|-----------------|
 | 1 | Find the idea | `/jn-video-idea-finder` | Angle/destination theme (or "find what's working") | `01-ideas/` |
-| 2 | Package it | `/jn-holy-trifecta` | The winning idea from step 1 | `02-packaging/titles/`, `02-packaging/thumbnails/`, `02-packaging/intros/` |
-| 3 | Script it | `/jn-scriptwriter` | Title + opening lines from step 2 | `03-scripts/` |
-| 4 | Produce it | — (manual: ElevenLabs narration + CapCut edit) | Script from step 3 | `04-recording-assets/raw-footage/`, `b-roll/`, `audio/` |
-| 5 | Post-upload checklist | `/jn-settings` | Transcript + title from step 3 | `05-post-upload/descriptions/`, `pinned-comments/`, `thumbnail-poll-variants/` |
+| 2+3 | Package it, then script it | `/jn-production-line` | An input (topic/theme/problem) | `02-packaging/titles/`, `thumbnails/`, `intros/`, then `03-scripts/` |
+| 4 | Produce it | See `PRODUCTION-SOP.md` (b-roll shoot + ElevenLabs narration + CapCut edit + export/QC) | Script from step 2+3 | `04-recording-assets/raw-footage/`, `b-roll/`, `audio/` |
+| 5 | Post-upload checklist | `/jn-settings` | Final export + title | `05-post-upload/descriptions/`, `pinned-comments/`, `thumbnail-poll-variants/` |
 | 6 | Review performance | `/jn-launch-optimization` | Analytics (CTR, retention, impressions) after 48+ hrs | `06-performance-review/` |
 | — | Monetize (run anytime) | `/jn-monetization` | Current income status | `06-performance-review/monetization-plan.md` |
 
 ## How to run a stage
 
-1. Say what you want in plain language (e.g. "give me video ideas for X" or "write a script for this title") —
-   the matching skill triggers automatically, or invoke it directly by name.
-2. Answer the skill's setup questions.
-3. Save the output as a file in the matching folder above, named with the video's working title
-   (e.g. `03-scripts/how-to-lose-fat-fast.md`).
-4. Move to the next stage using that saved output as input.
+1. Have an idea already? Hand it straight to `/jn-production-line` — it builds the
+   package (title/thumbnail/opening lines), pauses for your approval, then writes and
+   saves the full script. One input in, package + script out, everything auto-saved
+   with a matching filename slug across `02-packaging/` and `03-scripts/`.
+2. No idea yet? Start at `/jn-video-idea-finder`, then feed the winning idea into
+   `/jn-production-line`.
+3. Stage 4 (production) is manual — follow `PRODUCTION-SOP.md` step by step.
+4. Move to the next stage using the previous stage's saved output as input.
 
 ## Folder reference
 
