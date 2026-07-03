@@ -30,3 +30,16 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   await saveProjects(projects);
   return NextResponse.json(project);
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: { slug: string } }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+  const projects = await getProjects();
+  const idx = projects.findIndex((p) => p.slug === params.slug);
+  if (idx === -1) return NextResponse.json({ error: "not found" }, { status: 404 });
+
+  projects.splice(idx, 1);
+  await saveProjects(projects);
+  return NextResponse.json({ ok: true });
+}

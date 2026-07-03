@@ -130,11 +130,24 @@ feature add) — the site's job is the workflow and assets around it.
 - [x] Verified locally: clean build (no Edge Runtime warnings after the config split),
       full login flow tested via curl (CSRF token → credentials callback → session cookie →
       access to `/projects`), all working end to end.
-- [ ] Not yet deployed — Eli needs to: (1) add `AUTH_SECRET` + `AUTH_PASSWORD_HASH_B64` env
-      vars from `node scripts/generate-secrets.js`, (2) create a Blob store in Vercel's
-      Storage tab and connect it (adds `BLOB_READ_WRITE_TOKEN` automatically), (3) redeploy
-      the latest commit specifically (not an old one from the Deployments list — this bit
-      us before). See `dashboard/README.md`.
+- [x] Deployed and verified live (2026-07-03), after working through three real issues:
+      1. First password attempt failed — turned out to be a mix-up between the plaintext
+         login password and the base64 hash meant only for the env var; regenerated fresh
+         with `Bangrak2024` as the actual login password.
+      2. `BLOB_READ_WRITE_TOKEN` wasn't added automatically when the store was first
+         connected — added manually from the store's quickstart page.
+      3. First Blob store was created as **private** access by default, but our code
+         (and the Vercel quickstart snippet) assumes `access: 'public'`. No toggle existed
+         post-creation, so deleted and recreated the store choosing Public explicitly.
+         Also hit the by-now-familiar "env var change needs a fresh redeploy" issue twice
+         along the way (old store's stale token, then the new one).
+      Confirmed working end to end: logged in with the real password, created a test
+      project via the API, saw it render on `/projects`.
+- [x] Added a `DELETE /api/projects/[slug]` endpoint + delete button on the project page
+      (built while cleaning up the test project — useful going forward regardless).
+- [x] Removed the temporary error-detail exposure from `/api/projects` POST (was added
+      briefly to debug live, replaced with server-side `console.error` + a generic
+      client-facing message).
 - [ ] `content-calendar.md` and `/projects` are currently two separate records (markdown
       file vs. Blob-backed JSON) — not reconciled yet. Decide later whether `/projects`
       becomes the sole source of truth for stage-tracking, or they stay intentionally

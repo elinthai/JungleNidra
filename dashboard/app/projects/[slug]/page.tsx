@@ -2,6 +2,7 @@ import { getProjects } from "../../../lib/store";
 import StageSelector from "./StageSelector";
 import UploadForm from "./UploadForm";
 import NotesEditor from "./NotesEditor";
+import DeleteButton from "./DeleteButton";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -85,6 +86,10 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
       <h2>Notes</h2>
       <NotesEditor slug={project.slug} notes={project.notes} />
+
+      <div style={{ marginTop: 32 }}>
+        <DeleteButton slug={project.slug} />
+      </div>
     </div>
   );
 }

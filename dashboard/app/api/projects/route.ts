@@ -37,7 +37,8 @@ export async function POST(request: NextRequest) {
   try {
     await saveProjects(projects);
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    console.error("saveProjects failed:", error);
+    return NextResponse.json({ error: "failed to save project" }, { status: 500 });
   }
   return NextResponse.json(project, { status: 201 });
 }
