@@ -78,10 +78,11 @@ export default function OverviewPage() {
       <h2>Quick links</h2>
       <div className="card">
         <p>
-          <a href="/calendar">Content calendar</a> — every video's stage &nbsp;·&nbsp;{" "}
-          <a href="/locations">Location library</a> — 40-site shoot tracker
-          &nbsp;·&nbsp; <a href="/brand">Brand guide</a> — palette + imagery rules
-          &nbsp;·&nbsp; <a href="/sop">SOP</a> — the full production workflow
+          <a href="/projects">Projects</a> — the workbench: create/track videos, upload
+          footage &nbsp;·&nbsp; <a href="/calendar">Content calendar</a> — every video's
+          stage (static record) &nbsp;·&nbsp; <a href="/locations">Location library</a> —
+          40-site shoot tracker &nbsp;·&nbsp; <a href="/brand">Brand guide</a> — palette +
+          imagery rules &nbsp;·&nbsp; <a href="/sop">SOP</a> — the full production workflow
           &nbsp;·&nbsp; <a href="/todo">Todo</a> — system build log
         </p>
       </div>

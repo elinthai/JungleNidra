@@ -95,12 +95,52 @@ This tracks what's left to wire up, plus the next branches of the system.
       manually set to Next.js (didn't auto-detect on first deploy, causing a "no public
       directory" build failure — fixed once set explicitly).
 - [x] Password gate (`DASHBOARD_PASSWORD` env var + `middleware.ts`) removed 2026-07-03 —
-      the env var wasn't taking effect after a couple of redeploy attempts, and Eli chose to
-      go public rather than keep debugging. **Dashboard is currently public — no auth.**
-      Login code still in the repo (unused) if auth gets revisited later. Real business
-      details (revenue plans, unreleased titles/scripts) are visible to anyone with the URL.
-- [ ] Every push to `main` auto-redeploys, so routine content edits (new calendar rows,
+      the env var wasn't taking effect after a couple of redeploy attempts. Dashboard was
+      briefly public; **superseded by Branch 6.5 below**, which adds real auth back.
+- [x] Every push to `main` auto-redeploys, so routine content edits (new calendar rows,
       checked-off locations) show up on the next deploy with zero dashboard code changes.
+
+## Branch 6.5 — Workbench (Projects: real login, uploads) — built 2026-07-03
+
+Eli wants to go from "start to finish a project on this site" — create a video, upload
+raw footage/stills, track it through stages, all in the browser. Actual video editing
+stays in CapCut (rebuilding that in-browser would be its own large project, not a
+feature add) — the site's job is the workflow and assets around it.
+
+- [x] Real login via NextAuth (Credentials provider, single user, bcrypt-hashed password)
+      replacing the old custom cookie-compare approach that broke last time. Config split
+      into `lib/auth.config.ts` (edge-safe, used by `middleware.ts`) and `lib/auth.ts`
+      (full config with bcrypt, used by the route handler) — bcrypt isn't Edge-runtime
+      compatible, so it can't live in the middleware bundle.
+- [x] `AUTH_PASSWORD_HASH_B64`: the bcrypt hash is stored base64-encoded, not raw — raw
+      hashes are full of `$` characters that both Vercel's env var UI and Next.js's local
+      `.env` loader can silently mangle (this actually happened during local testing:
+      `dotenv-expand` stripped the `$2b$10$...` prefix, breaking every login attempt until
+      caught). `scripts/generate-secrets.js "password"` generates both `AUTH_SECRET` and
+      the base64 hash — run it locally, paste output into Vercel.
+- [x] `/projects` — the new workbench. Create a project (title + optional target day),
+      it gets a slug matching what `jn-production-line` uses for git-tracked package/script
+      files. Each project page has: a stage selector (same 8 stages as `content-calendar.md`),
+      a brand palette reference, an upload widget (video/photo, labeled with site name),
+      and a notes field.
+- [x] Storage: one Vercel Blob store holds `data/projects.json` (acts as a lightweight
+      database — no separate DB needed for single-user, low-volume data) plus the uploaded
+      files themselves. Uploads use `@vercel/blob/client`'s direct-to-Blob pattern so large
+      video files bypass the serverless function body-size limit.
+- [x] Verified locally: clean build (no Edge Runtime warnings after the config split),
+      full login flow tested via curl (CSRF token → credentials callback → session cookie →
+      access to `/projects`), all working end to end.
+- [ ] Not yet deployed — Eli needs to: (1) add `AUTH_SECRET` + `AUTH_PASSWORD_HASH_B64` env
+      vars from `node scripts/generate-secrets.js`, (2) create a Blob store in Vercel's
+      Storage tab and connect it (adds `BLOB_READ_WRITE_TOKEN` automatically), (3) redeploy
+      the latest commit specifically (not an old one from the Deployments list — this bit
+      us before). See `dashboard/README.md`.
+- [ ] `content-calendar.md` and `/projects` are currently two separate records (markdown
+      file vs. Blob-backed JSON) — not reconciled yet. Decide later whether `/projects`
+      becomes the sole source of truth for stage-tracking, or they stay intentionally
+      separate (calendar = git-visible snapshot, projects = live working tool).
+- [ ] Phase 2 (not built): trigger `jn-production-line`/`jn-repurposing` generation
+      directly from the site via the Claude API, instead of through Claude Code chat.
 
 ## Later (once channel has traction — not now)
 
