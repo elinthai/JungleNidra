@@ -74,10 +74,12 @@ This tracks what's left to wire up, plus the next branches of the system.
       lines for brand recognition across videos. Folder ready at `brand-assets/audio-bed/`.
 - [ ] Channel art (banner/profile image) — not built yet. Folder ready at `brand-assets/channel-art/`.
 
-## Branch 5 — Revenue / financials tracking
+## Branch 5 — Revenue / financials tracking — built 2026-07-03
 
-- [ ] New file: `06-performance-review/revenue-log.md` — actuals vs. the plan from `jn-monetization`
-      (ad revenue, affiliate, any other layer), updated monthly.
+- [x] New file: `06-performance-review/revenue-log.md` — monthly actuals table across all 5 of
+      `jn-monetization`'s income layers (Ads, Affiliate, Memberships, Licensing, Sponsorships).
+- [ ] No plan has actually been run yet — run `/jn-monetization` once a few videos are live and
+      there's real view/sub numbers to work from.
 
 ## Later (once channel has traction — not now)
 
@@ -88,6 +90,6 @@ This tracks what's left to wire up, plus the next branches of the system.
 
 ## Open questions for Eli
 
-- Does Jungle Nidra publish audio-only versions anywhere (Spotify, Insight Timer)? Affects Branch 2 scope.
-- Any videos already produced that should be retro-fitted through the new pipeline/folders, or do we
-  start clean from the next upload?
+- Audio-only cross-posting (Spotify, Insight Timer): resolved as a monetization question, not just
+  distribution — it's `jn-monetization` Layer 4 (licensing). Revisit once there's a script/soundscape
+  library deep enough to license, tracked via `06-performance-review/revenue-log.md`.
