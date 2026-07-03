@@ -20,9 +20,11 @@ This tracks what's left to wire up, plus the next branches of the system.
       across `02-packaging/` and `03-scripts/`. This is now the default Stage 2+3 entry point in `SOP.md`.
 - [x] `PRODUCTION-SOP.md`: Stage 4 runbook covering the b-roll shoot (nature/ambient, no people) and the
       digital pipeline (ElevenLabs narration → CapCut edit → soundscape → export/QC).
-- [ ] Fill in the `[FILL IN]` markers in `PRODUCTION-SOP.md`: shoot location, camera gear, shot-list
-      convention, ElevenLabs voice ID + stability/style settings, CapCut template location, silence-gap
-      method, export settings. Once filled, this becomes a fixed per-video checklist.
+- [x] Filled in `PRODUCTION-SOP.md` (2026-07-03): beginner-friendly 4-shot filming checklist for the
+      40-site Koh Samui location library (iPhone 15 + lapel mic + tripod + gimbal), ElevenLabs setting
+      guidance for the cloned/stable voice, CapCut silence-gap + template-build plan (first video builds
+      the template), and recommended export settings. Added `04-recording-assets/location-library.md`
+      to track the 40 sites (10 each: beach/temple/jungle/shala) — site names still need to be filled in.
 - [ ] Run one real input through `/jn-production-line` end to end to sanity-check the approval pause
       and file-saving behavior before relying on it for the next Tue/Thu upload.
 
