@@ -60,12 +60,19 @@ This tracks what's left to wire up, plus the next branches of the system.
 - [ ] Remember to update `content-calendar.md` by hand as videos move through stages — nothing
       auto-updates it yet.
 
-## Branch 4 — Brand asset library
+## Branch 4 — Brand asset library — built 2026-07-03
 
-- [ ] New folder: `brand-assets/` — visual identity reference (color palette, imagery style: jungle/water/
-      night-sky/soft-light), reusable thumbnail template, intro/outro audio bed, channel art.
-- [ ] Document the ElevenLabs voice settings (voice ID, stability/style params) and CapCut project
-      template so narration/editing stays consistent across videos without re-deriving it each time.
+- [x] New folder: `brand-assets/` with `brand-guide.md` — consolidates the color palette (deep blue /
+      soft moss green / warm amber glow), imagery style rules, and the 4-part thumbnail construction
+      template pulled from the pattern already used in `02-packaging/thumbnails/`.
+- [x] ElevenLabs voice settings and CapCut plan already documented in `PRODUCTION-SOP.md` — brand-guide
+      references them rather than duplicating.
+- [ ] Actual thumbnail template file doesn't exist yet — build one (Canva/Photoshop) once you've made
+      a few thumbnails by hand, then store it in `brand-assets/thumbnail-template/` and note it in
+      `brand-guide.md`.
+- [ ] Intro/outro audio bed — not built yet. Optional: a consistent quiet ambient bed under the opening
+      lines for brand recognition across videos. Folder ready at `brand-assets/audio-bed/`.
+- [ ] Channel art (banner/profile image) — not built yet. Folder ready at `brand-assets/channel-art/`.
 
 ## Branch 5 — Revenue / financials tracking
 
