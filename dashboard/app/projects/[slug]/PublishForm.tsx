@@ -28,6 +28,18 @@ export default function PublishForm({
     router.refresh();
   }
 
+  async function handleClear() {
+    if (!confirm("Clear the published link? This won't change the stage back.")) return;
+    setSaving(true);
+    await fetch(`/api/projects/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ publishUrl: "" }),
+    });
+    setSaving(false);
+    router.refresh();
+  }
+
   if (publishUrl) {
     return (
       <div className="card">
@@ -42,6 +54,22 @@ export default function PublishForm({
             Recorded {new Date(publishedAt).toLocaleString()}
           </p>
         )}
+        <button
+          onClick={handleClear}
+          disabled={saving}
+          style={{
+            marginTop: 10,
+            padding: "5px 10px",
+            borderRadius: 6,
+            border: "1px solid var(--border)",
+            background: "transparent",
+            color: "var(--text-dim)",
+            cursor: "pointer",
+            fontSize: 12,
+          }}
+        >
+          Clear (mistake)
+        </button>
       </div>
     );
   }

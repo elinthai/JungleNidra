@@ -24,10 +24,16 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   if (typeof body.stage === "string") project.stage = body.stage;
   if (typeof body.notes === "string") project.notes = body.notes;
   if (typeof body.targetDay === "string") project.targetDay = body.targetDay;
-  if (typeof body.publishUrl === "string" && body.publishUrl.trim()) {
-    project.publishUrl = body.publishUrl.trim();
-    if (!project.publishedAt) project.publishedAt = new Date().toISOString();
-    project.stage = "Uploaded";
+  if (typeof body.publishUrl === "string") {
+    if (body.publishUrl.trim()) {
+      project.publishUrl = body.publishUrl.trim();
+      if (!project.publishedAt) project.publishedAt = new Date().toISOString();
+      project.stage = "Uploaded";
+    } else {
+      // Explicit empty string clears a mistaken publish.
+      delete project.publishUrl;
+      delete project.publishedAt;
+    }
   }
   project.updatedAt = new Date().toISOString();
   projects[idx] = project;
