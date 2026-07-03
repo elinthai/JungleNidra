@@ -35,12 +35,17 @@ This tracks what's left to wire up, plus the next branches of the system.
       pause timings and the Na Muang 1/2 shoot list onto `PRODUCTION-SOP.md`. Approval pause worked as
       designed. Eli will shoot/produce this as the actual first video and report back.
 
-## Branch 2 — Repurposing / distribution
+## Branch 2 — Repurposing / distribution — built 2026-07-03
 
-- [ ] New folder: `07-repurposing/shorts/`, `07-repurposing/clips/`
-- [ ] Define a "cut list" step: after a long-form video is scripted, pull 2-3 short, self-contained
-      moments (a single technique, a single opening line) as Shorts — must still pass the anonymity
-      guardrail (no face).
+- [x] New folders: `07-repurposing/shorts/`, `07-repurposing/feeder-reels/`, plus
+      `04-recording-assets/stills/` as the intake folder for photo assets from the shoot.
+- [x] `jn-repurposing` skill: takes a video's slug once raw footage/stills are back from filming,
+      finds 2-3 self-contained moments in the approved script, and builds one **feeder reel**
+      (best shot + calmest line + soft pointer back to the long-form video) plus standalone shorts.
+      Wired into `SOP.md` as Stage 4.5, running right after the shoot (doesn't wait on the full
+      CapCut edit). Output is a planning/cut-sheet doc — actual clip export is still manual in CapCut.
+- [ ] Run `/jn-repurposing` for real once raw footage exists for `anxiety-relief-waterfall-journey`
+      to sanity-check it the same way we tested `/jn-production-line`.
 - [ ] Decide if Jungle Nidra cross-posts anywhere else (Spotify/Insight Timer for audio-only sleep
       tracks is common for this niche) — if yes, add a distribution checklist per platform.
 

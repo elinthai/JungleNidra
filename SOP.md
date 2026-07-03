@@ -12,10 +12,18 @@ the next stage. Every skill enforces the channel's anonymity guardrails automati
 |---|-------|------------------|-------|-----------------|
 | 1 | Find the idea | `/jn-video-idea-finder` | Angle/destination theme (or "find what's working") | `01-ideas/` |
 | 2+3 | Package it, then script it | `/jn-production-line` | An input (topic/theme/problem) | `02-packaging/titles/`, `thumbnails/`, `intros/`, then `03-scripts/` |
-| 4 | Produce it | See `PRODUCTION-SOP.md` (b-roll shoot + ElevenLabs narration + CapCut edit + export/QC) | Script from step 2+3 | `04-recording-assets/raw-footage/`, `b-roll/`, `audio/` |
+| 4 | Produce it | See `PRODUCTION-SOP.md` (b-roll shoot + ElevenLabs narration + CapCut edit + export/QC) | Script from step 2+3 | `04-recording-assets/raw-footage/`, `stills/`, `b-roll/`, `audio/` |
+| 4.5 | Repurpose it | `/jn-repurposing` | Raw footage/stills back from the shoot + the approved script | `07-repurposing/feeder-reels/`, `07-repurposing/shorts/` |
 | 5 | Post-upload checklist | `/jn-settings` | Final export + title | `05-post-upload/descriptions/`, `pinned-comments/`, `thumbnail-poll-variants/` |
 | 6 | Review performance | `/jn-launch-optimization` | Analytics (CTR, retention, impressions) after 48+ hrs | `06-performance-review/` |
 | — | Monetize (run anytime) | `/jn-monetization` | Current income status | `06-performance-review/monetization-plan.md` |
+
+Stage 4.5 runs as soon as raw footage/stills are back from filming — it doesn't wait
+for the long-form CapCut edit to finish. It produces one **feeder reel** (a short
+teaser built from the most striking shot + a calm line from the script, closing with a
+soft pointer to the full long-form video) plus 1-2 standalone Shorts/Reels cut from
+other self-contained moments in the script. This is what connects the long-form video
+to its short-form distribution — the feeder reel is the explicit bridge between the two.
 
 ## How to run a stage
 
@@ -26,7 +34,11 @@ the next stage. Every skill enforces the channel's anonymity guardrails automati
 2. No idea yet? Start at `/jn-video-idea-finder`, then feed the winning idea into
    `/jn-production-line`.
 3. Stage 4 (production) is manual — follow `PRODUCTION-SOP.md` step by step.
-4. Move to the next stage using the previous stage's saved output as input.
+4. As soon as raw footage/stills are back from the shoot, hand the video's slug to
+   `/jn-repurposing` — it plans the feeder reel and standalone shorts from the raw
+   assets and the already-approved script. Actual clipping still happens manually in
+   CapCut, using its output as the cut sheet.
+5. Move to the next stage using the previous stage's saved output as input.
 
 ## Folder reference
 
@@ -38,14 +50,18 @@ the next stage. Every skill enforces the channel's anonymity guardrails automati
   intros/                        <- intro scripts
 03-scripts/                      <- full teleprompter scripts
 04-recording-assets/
-  raw-footage/
-  b-roll/
+  raw-footage/                   <- organized by site name, reused across videos
+  stills/                        <- organized by video slug
+  b-roll/                        <- supplemental stock/AI-generated footage
   audio/
 05-post-upload/
   descriptions/                  <- SEO descriptions
   pinned-comments/
   thumbnail-poll-variants/       <- A/B thumbnail images for Community poll
 06-performance-review/           <- launch diagnostics + monetization plans
+07-repurposing/
+  feeder-reels/                  <- one per video, teases the long-form upload
+  shorts/                        <- standalone self-contained Shorts/Reels
 ```
 
 ## Notes
