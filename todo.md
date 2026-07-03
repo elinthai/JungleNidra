@@ -28,8 +28,12 @@ This tracks what's left to wire up, plus the next branches of the system.
       categories are actually Beach/Temple/Waterfall/Jungle, not Beach/Temple/Jungle/Shala as originally
       planned; updated `PRODUCTION-SOP.md` to match.
 - [ ] Jungle category is 6 of 10 — need 4 more jungle sites from Eli to complete the library.
-- [ ] Run one real input through `/jn-production-line` end to end to sanity-check the approval pause
-      and file-saving behavior before relying on it for the next Tue/Thu upload.
+- [x] Test run completed 2026-07-03: input "a Na Muang waterfall journey for anxiety relief, long
+      all-night track" → `/jn-production-line` produced and saved package + script under
+      `anxiety-relief-waterfall-journey`, plus a per-video production checklist
+      (`04-recording-assets/anxiety-relief-waterfall-journey-checklist.md`) mapping the script's exact
+      pause timings and the Na Muang 1/2 shoot list onto `PRODUCTION-SOP.md`. Approval pause worked as
+      designed. Eli will shoot/produce this as the actual first video and report back.
 
 ## Branch 2 — Repurposing / distribution
 
