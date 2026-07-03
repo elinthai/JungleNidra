@@ -81,6 +81,26 @@ This tracks what's left to wire up, plus the next branches of the system.
 - [ ] No plan has actually been run yet — run `/jn-monetization` once a few videos are live and
       there's real view/sub numbers to work from.
 
+## Branch 6 — Dashboard UI — built 2026-07-03
+
+- [x] `dashboard/` — a Next.js app reading `content-calendar.md`, `todo.md`, `SOP.md`,
+      `PRODUCTION-SOP.md`, `brand-assets/brand-guide.md`, and
+      `04-recording-assets/location-library.md` from the repo root at build time.
+      View-only by design (per Eli's call) — the markdown files stay the source of truth.
+- [x] Pages: Overview (stats), Calendar, Locations (progress bars per category), Brand
+      (palette swatches + guide), SOP, Todo.
+- [x] Password-protected via `DASHBOARD_PASSWORD` env var + Next.js middleware — a single
+      shared-password gate, not full auth (per Eli's call, appropriate for a one-person
+      dashboard with real business details).
+- [x] Verified locally: build succeeds, login sets the cookie, all pages render real repo
+      content correctly (calendar shows the waterfall video, locations shows Na Muang 1, etc).
+- [ ] Not yet deployed to Vercel — needs Eli to import the GitHub repo at vercel.com/new
+      (Root Directory = `dashboard`, env var `DASHBOARD_PASSWORD` set), since deployment
+      requires Eli's Vercel account. See `dashboard/README.md` for exact steps.
+- [ ] Once deployed: every push to `main` auto-redeploys, so routine content edits (new
+      calendar rows, checked-off locations) show up on the next deploy with zero dashboard
+      code changes.
+
 ## Later (once channel has traction — not now)
 
 - [ ] Community/comment management branch (recurring engagement pass beyond the pinned comment).
