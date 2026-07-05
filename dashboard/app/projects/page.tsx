@@ -1,4 +1,4 @@
-import { getProjects } from "../../lib/store";
+import { getProjects, STAGE_CHECKLISTS } from "../../lib/store";
 import CreateProjectForm from "./CreateProjectForm";
 
 export const dynamic = "force-dynamic";
@@ -6,6 +6,13 @@ export const dynamic = "force-dynamic";
 function stageBadgeClass(stage: string): string {
   const slug = stage.trim().toLowerCase().replace(/\s+/g, "-");
   return `badge stage-${slug}`;
+}
+
+function stageProgress(stage: string, completedSteps: Record<string, string[]>): string {
+  const items = STAGE_CHECKLISTS[stage] || [];
+  if (items.length === 0) return "";
+  const done = (completedSteps[stage] || []).length;
+  return `${done}/${items.length} steps`;
 }
 
 export default async function ProjectsPage() {
@@ -37,6 +44,11 @@ export default async function ProjectsPage() {
             >
               <h3 style={{ marginTop: 0 }}>{p.title}</h3>
               <span className={stageBadgeClass(p.stage)}>{p.stage}</span>
+              {stageProgress(p.stage, p.completedSteps) && (
+                <span style={{ marginLeft: 8, fontSize: 12, color: "var(--text-dim)" }}>
+                  {stageProgress(p.stage, p.completedSteps)}
+                </span>
+              )}
               <p style={{ marginTop: 10, fontSize: 13 }}>
                 {p.assets.length} asset{p.assets.length === 1 ? "" : "s"}
                 {p.targetDay ? ` · Target: ${p.targetDay}` : ""}

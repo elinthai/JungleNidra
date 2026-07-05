@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/brand">Brand</a>
             <a href="/sop">SOP</a>
             <a href="/todo">Todo</a>
+            <a href="/changelog">Changelog</a>
             <span style={{ flex: 1 }} />
             <SignOutButton />
           </nav>

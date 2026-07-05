@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../../lib/auth";
-import { getProjects, saveProjects } from "../../../../lib/store";
+import { getProjects, saveProjects, isStageComplete, nextStage } from "../../../../lib/store";
 
 export async function GET(_req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await auth();
@@ -33,6 +33,26 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
       // Explicit empty string clears a mistaken publish.
       delete project.publishUrl;
       delete project.publishedAt;
+    }
+  }
+  if (body.toggleStep && typeof body.toggleStep === "object") {
+    const { stage, itemId, checked } = body.toggleStep as {
+      stage: string;
+      itemId: string;
+      checked: boolean;
+    };
+    const done = new Set(project.completedSteps[stage] || []);
+    if (checked) done.add(itemId);
+    else done.delete(itemId);
+    project.completedSteps[stage] = Array.from(done);
+  }
+  if (Array.isArray(body.scoutedSites)) {
+    project.scoutedSites = body.scoutedSites.map((s: unknown) => String(s));
+  }
+  if (body.toggleStep || Array.isArray(body.scoutedSites)) {
+    if (isStageComplete(project, project.stage)) {
+      const next = nextStage(project.stage);
+      if (next) project.stage = next;
     }
   }
   project.updatedAt = new Date().toISOString();

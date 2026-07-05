@@ -1,5 +1,7 @@
-import { getProjects } from "../../../lib/store";
+import { getProjects, getLocations, STAGE_CHECKLISTS, previousStage } from "../../../lib/store";
 import StageSelector from "./StageSelector";
+import StageChecklist from "./StageChecklist";
+import SitePicker from "./SitePicker";
 import UploadForm from "./UploadForm";
 import NotesEditor from "./NotesEditor";
 import DeleteButton from "./DeleteButton";
@@ -21,6 +23,8 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
   const rawFootage = project.assets.filter((a) => a.kind === "raw-footage");
   const stills = project.assets.filter((a) => a.kind === "still");
+  const checklistItems = STAGE_CHECKLISTS[project.stage] || [];
+  const locations = project.stage === "Location Scouted" ? await getLocations() : null;
 
   return (
     <div className="shell">
@@ -31,8 +35,32 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         <code>/jn-production-line</code>.
       </p>
 
-      <h2>Stage</h2>
-      <StageSelector slug={project.slug} stage={project.stage} />
+      <h2>Current stage: {project.stage}</h2>
+      <StageChecklist
+        slug={project.slug}
+        stage={project.stage}
+        items={checklistItems}
+        completed={project.completedSteps[project.stage] || []}
+        previousStage={previousStage(project.stage)}
+      />
+      {locations && (
+        <>
+          <h3 style={{ marginTop: 20 }}>Pick site(s) for this project</h3>
+          <SitePicker slug={project.slug} categories={locations} scoutedSites={project.scoutedSites || []} />
+        </>
+      )}
+      <p style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 10 }}>
+        Checking the last box here auto-advances the project to the next stage.
+      </p>
+
+      <details style={{ marginTop: 16 }}>
+        <summary style={{ cursor: "pointer", fontSize: 13, color: "var(--text-dim)" }}>
+          Jump to a different stage manually
+        </summary>
+        <div style={{ marginTop: 10 }}>
+          <StageSelector slug={project.slug} stage={project.stage} />
+        </div>
+      </details>
 
       <h2>Brand reference</h2>
       <div className="card">

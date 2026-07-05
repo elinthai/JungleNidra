@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     assets: [],
     createdAt: now,
     updatedAt: now,
+    completedSteps: {},
   };
   projects.push(project);
   try {

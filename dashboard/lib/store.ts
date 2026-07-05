@@ -20,6 +20,8 @@ export interface Project {
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
+  completedSteps: Record<string, string[]>;
+  scoutedSites?: string[];
 }
 
 const PROJECTS_PATH = "data/projects.json";
@@ -28,16 +30,161 @@ export const STAGES = [
   "Idea",
   "Packaged",
   "Scripted",
-  "Shooting",
-  "Editing",
+  "Location Scouted",
+  "Filmed",
+  "Voice Recorded",
+  "Assembled",
+  "Soundscape Added",
+  "QC Reviewed",
+  "Exported",
   "Repurposing",
   "Uploaded",
-  "Reviewed",
+  "Scheduled/Live",
+  "Performance Reviewed",
 ];
 
 export function stageIndex(stage: string): number {
   const idx = STAGES.indexOf(stage);
   return idx === -1 ? 0 : idx;
+}
+
+export function nextStage(stage: string): string | null {
+  const idx = stageIndex(stage);
+  return idx === -1 || idx >= STAGES.length - 1 ? null : STAGES[idx + 1];
+}
+
+export function previousStage(stage: string): string | null {
+  const idx = stageIndex(stage);
+  return idx <= 0 ? null : STAGES[idx - 1];
+}
+
+// --- Per-stage SOP checklists ---
+// Seeded from SOP.md (rows 1-2+3, 4.5, 5, 6) and PRODUCTION-SOP.md (Parts 1-4).
+// Each stage's checklist is what shows when a project sits at that stage — the
+// project page IS the SOP, so there's no separate doc to remember to check.
+
+export interface StageChecklistItem {
+  id: string;
+  text: string;
+}
+
+export const STAGE_CHECKLISTS: Record<string, StageChecklistItem[]> = {
+  Idea: [
+    { id: "run-idea-finder", text: "Run /jn-video-idea-finder (or note the winning idea/theme)" },
+    { id: "save-idea", text: "Save the idea/shortlist to 01-ideas/" },
+  ],
+  Packaged: [
+    { id: "run-packaging", text: "Run /jn-production-line packaging step (title/thumbnail/opening lines)" },
+    { id: "approve-packaging", text: "Approve the packaging output" },
+    { id: "save-packaging", text: "Saved to 02-packaging/titles, thumbnails, intros" },
+  ],
+  Scripted: [
+    { id: "generate-script", text: "Full script generated via /jn-production-line" },
+    { id: "save-script", text: "Script saved to 03-scripts/[slug].md" },
+    { id: "approve-script", text: "Script approved" },
+  ],
+  "Location Scouted": [
+    { id: "pick-category", text: "Pick location category matching the approved thumbnail concept" },
+    { id: "gear-ready", text: "Gear ready: iPhone 15, lapel mic, tripod, gimbal" },
+  ],
+  Filmed: [
+    { id: "camera-settings", text: "4K at 24fps (or 30fps, stay consistent), exposure locked" },
+    { id: "lens-clean", text: "Lens cleaned before shooting" },
+    { id: "four-shot-set", text: "4-shot set per site: wide establishing, slow push-in, static detail, slow pan/glide" },
+    { id: "no-people", text: "No people/faces/identifiable landmarks in any clip" },
+    { id: "soft-light", text: "Shot during soft light (early morning/late afternoon) where possible" },
+    { id: "save-footage", text: "Raw footage saved to 04-recording-assets/raw-footage/[site-name]/" },
+  ],
+  "Voice Recorded": [
+    { id: "voice-clone", text: "Using cloned voice already uploaded to ElevenLabs" },
+    { id: "voice-settings", text: "Speed low, Stability ~80-90%, Style ~0-15%, Similarity ~75%+" },
+    { id: "generate-chunks", text: "Script generated in chunks at natural pause points (not one block)" },
+    { id: "save-audio", text: "Narration saved to 04-recording-assets/audio/[slug]/narration/, numbered in order" },
+  ],
+  Assembled: [
+    { id: "capcut-project", text: "CapCut project started at Export-stage settings" },
+    { id: "track-stack", text: "Track stack built: b-roll video, narration audio, soundscape audio (in that order)" },
+    { id: "silence-gaps", text: "1.5-2s silence between sentences, 4-6s between major beats" },
+    { id: "broll-cuts", text: "B-roll laid under narration, slow cuts only (~every 15-20s+)" },
+  ],
+  "Soundscape Added": [
+    { id: "layer-soundscape", text: "Ambient soundscape layered under narration + into the silent tail" },
+    { id: "midroll-ads", text: "Mid-roll ad placement (if applicable) — only within spoken portion" },
+    { id: "thumbnail-built", text: "Final thumbnail image built from the approved concept" },
+  ],
+  "QC Reviewed": [
+    { id: "watch-full", text: "Watch/listen to the full edit start to finish" },
+    { id: "opening-settles", text: "Opening 60-90 seconds actually settles the listener (jn-settings Task 1)" },
+  ],
+  Exported: [
+    { id: "export-format", text: "Format: MP4 (H.264)" },
+    { id: "export-resolution", text: "Resolution: 4K (or 1080p), matching capture" },
+    { id: "export-framerate", text: "Frame rate matches capture rate (24fps or 30fps)" },
+    { id: "export-audio", text: "Audio: AAC, 48kHz, stereo" },
+    { id: "save-export", text: "Final export + thumbnail saved, file location noted" },
+  ],
+  Repurposing: [
+    { id: "run-repurposing", text: "Run /jn-repurposing using raw footage/stills + the approved script" },
+    { id: "feeder-reel", text: "One feeder reel produced, bridging to the long-form upload" },
+    { id: "standalone-shorts", text: "1-2 standalone Shorts/Reels cut" },
+    { id: "save-repurposing", text: "Saved to 07-repurposing/feeder-reels and /shorts" },
+  ],
+  Uploaded: [
+    { id: "run-settings", text: "Run /jn-settings post-upload checklist" },
+    { id: "seo-description", text: "SEO description written" },
+    { id: "pinned-comment", text: "Pinned comment posted" },
+    { id: "keep-private", text: "Kept Private for 24-48 hours before going live" },
+  ],
+  "Scheduled/Live": [
+    { id: "set-publish-date", text: "Scheduled publish date/time set" },
+    { id: "confirm-live", text: "Flipped to Public / confirmed live" },
+  ],
+  "Performance Reviewed": [
+    { id: "wait-analytics", text: "Waited 48+ hrs for analytics (CTR, retention, impressions)" },
+    { id: "run-optimization", text: "Run /jn-launch-optimization" },
+    { id: "save-review", text: "Diagnosis saved to 06-performance-review/" },
+    { id: "loop-note", text: "Loop-note lesson fed back into the next video's packaging" },
+  ],
+};
+
+/** True when every checklist item for the given stage is checked, plus any stage-specific extra requirement. */
+export function isStageComplete(project: Project, stage: string): boolean {
+  const items = STAGE_CHECKLISTS[stage] || [];
+  const done = project.completedSteps[stage] || [];
+  const allChecked = items.every((item) => done.includes(item.id));
+  if (!allChecked) return false;
+  if (stage === "Location Scouted") return (project.scoutedSites?.length ?? 0) > 0;
+  if (stage === "Scheduled/Live") return !!project.targetDay;
+  return true;
+}
+
+export interface OpenStep {
+  slug: string;
+  title: string;
+  stage: string;
+  text: string;
+}
+
+/** Rollup of every unchecked checklist item across all projects, grouped by current stage. */
+export function getOpenSteps(projects: Project[]): OpenStep[] {
+  const steps: OpenStep[] = [];
+  for (const project of projects) {
+    const stage = project.stage;
+    const items = STAGE_CHECKLISTS[stage] || [];
+    const done = project.completedSteps[stage] || [];
+    for (const item of items) {
+      if (!done.includes(item.id)) {
+        steps.push({ slug: project.slug, title: project.title, stage, text: item.text });
+      }
+    }
+    if (stage === "Location Scouted" && (project.scoutedSites?.length ?? 0) === 0) {
+      steps.push({ slug: project.slug, title: project.title, stage, text: "Pick site(s) from the location library" });
+    }
+    if (stage === "Scheduled/Live" && !project.targetDay) {
+      steps.push({ slug: project.slug, title: project.title, stage, text: "Set a target publish day" });
+    }
+  }
+  return steps.sort((a, b) => stageIndex(a.stage) - stageIndex(b.stage));
 }
 
 export async function getProjects(): Promise<Project[]> {

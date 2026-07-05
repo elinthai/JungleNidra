@@ -19,8 +19,8 @@ export default async function OverviewPage() {
       <h1>Jungle Nidra — Production Overview</h1>
       <p>
         Live snapshot of the workbench. Project and location data lives in Blob storage —
-        edit it from <a href="/projects">/projects</a>, not here. The Brand/SOP/Todo pages
-        still read from git, edited via Claude Code or GitHub.
+        edit it from <a href="/projects">/projects</a>, not here. The Brand/SOP pages still
+        read from git, edited via Claude Code or GitHub.
       </p>
 
       <div className="grid">
@@ -62,7 +62,8 @@ export default async function OverviewPage() {
           stage, table view &nbsp;·&nbsp; <a href="/locations">Location library</a> —
           40-site shoot tracker &nbsp;·&nbsp; <a href="/brand">Brand guide</a> — palette +
           imagery rules &nbsp;·&nbsp; <a href="/sop">SOP</a> — the full production workflow
-          &nbsp;·&nbsp; <a href="/todo">Todo</a> — system build log
+          &nbsp;·&nbsp; <a href="/todo">Todo</a> — auto-rollup of every open checklist step
+          &nbsp;·&nbsp; <a href="/changelog">Changelog</a> — system build log
         </p>
       </div>
     </div>
