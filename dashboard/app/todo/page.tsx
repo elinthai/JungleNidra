@@ -1,10 +1,12 @@
 import { getProjects, getOpenSteps } from "../../lib/store";
+import { getActiveChannel } from "../../lib/activeChannel";
 
 export const dynamic = "force-dynamic";
 
 export default async function TodoPage() {
+  const activeChannel = getActiveChannel();
   const projects = await getProjects();
-  const steps = getOpenSteps(projects);
+  const steps = getOpenSteps(projects.filter((p) => p.channel === activeChannel));
 
   const grouped = new Map<string, typeof steps>();
   for (const step of steps) {

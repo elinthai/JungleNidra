@@ -160,25 +160,28 @@ th {
   color: var(--blue);
   border: 1px solid rgba(63, 127, 168, 0.35);
 }
-.badge.stage-idea {
+.badge.stage-idea,
+.badge.stage-script-generated {
   background: rgba(143, 163, 173, 0.15);
   color: var(--text-dim);
   border-color: var(--border);
 }
-.badge.stage-scripted,
-.badge.stage-packaged {
+.badge.stage-authenticity-check {
   background: rgba(63, 127, 168, 0.18);
   color: var(--blue);
   border-color: rgba(63, 127, 168, 0.35);
 }
-.badge.stage-shooting,
-.badge.stage-editing {
+.badge.stage-record-create-media,
+.badge.stage-insert-media,
+.badge.stage-add-voiced-script,
+.badge.stage-thumbnail-title,
+.badge.stage-export {
   background: rgba(211, 161, 92, 0.18);
   color: var(--amber);
   border-color: rgba(211, 161, 92, 0.35);
 }
-.badge.stage-uploaded,
-.badge.stage-reviewed {
+.badge.stage-review,
+.badge.stage-publish-to-youtube {
   background: rgba(107, 143, 113, 0.2);
   color: var(--green);
   border-color: rgba(107, 143, 113, 0.4);

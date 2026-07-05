@@ -1,8 +1,22 @@
 import { getLocations } from "../../lib/store";
+import { getActiveChannel } from "../../lib/activeChannel";
+import { getChannel } from "../../lib/channels";
 
 export const dynamic = "force-dynamic";
 
 export default async function LocationsPage() {
+  const activeChannel = getActiveChannel();
+  const channel = getChannel(activeChannel);
+
+  if (activeChannel !== "jungle-nidra") {
+    return (
+      <div className="shell">
+        <h1>Location Library</h1>
+        <p>No location library for {channel.name} — this 40-site Koh Samui library is Jungle Nidra-specific.</p>
+      </div>
+    );
+  }
+
   const categories = await getLocations();
 
   return (

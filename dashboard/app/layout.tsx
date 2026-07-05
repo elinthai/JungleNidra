@@ -1,6 +1,8 @@
 import "./globals.css";
 import Providers from "./providers";
 import SignOutButton from "./SignOutButton";
+import ChannelSwitcher from "./ChannelSwitcher";
+import { getActiveChannel } from "../lib/activeChannel";
 
 export const metadata = {
   title: "Jungle Nidra Dashboard",
@@ -8,6 +10,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const activeChannel = getActiveChannel();
   return (
     <html lang="en">
       <body>
@@ -23,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/todo">Todo</a>
             <a href="/changelog">Changelog</a>
             <span style={{ flex: 1 }} />
+            <ChannelSwitcher activeChannel={activeChannel} />
             <SignOutButton />
           </nav>
           {children}

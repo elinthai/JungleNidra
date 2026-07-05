@@ -1,10 +1,12 @@
 import { getProjects, STAGE_CHECKLISTS } from "../../lib/store";
+import { getActiveChannel } from "../../lib/activeChannel";
+import { getChannel } from "../../lib/channels";
 import CreateProjectForm from "./CreateProjectForm";
 
 export const dynamic = "force-dynamic";
 
 function stageBadgeClass(stage: string): string {
-  const slug = stage.trim().toLowerCase().replace(/\s+/g, "-");
+  const slug = stage.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   return `badge stage-${slug}`;
 }
 
@@ -16,19 +18,23 @@ function stageProgress(stage: string, completedSteps: Record<string, string[]>):
 }
 
 export default async function ProjectsPage() {
+  const activeChannel = getActiveChannel();
+  const channel = getChannel(activeChannel);
   const projects = await getProjects();
-  const sorted = [...projects].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const sorted = [...projects]
+    .filter((p) => p.channel === activeChannel)
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
   return (
     <div className="shell">
-      <h1>Projects</h1>
+      <h1>Projects — {channel.name}</h1>
       <p>
         Your workbench. Create a project per video, then upload raw footage/stills here
         as they come back from the shoot. Slug matches what <code>/jn-production-line</code>{" "}
         uses for the script/package files in the repo.
       </p>
 
-      <CreateProjectForm />
+      <CreateProjectForm activeChannel={activeChannel} />
 
       <h2>All projects</h2>
       {sorted.length === 0 ? (

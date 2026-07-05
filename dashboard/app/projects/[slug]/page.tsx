@@ -1,38 +1,39 @@
 import { getProjects, getLocations, STAGE_CHECKLISTS, previousStage } from "../../../lib/store";
+import { getChannel } from "../../../lib/channels";
 import StageSelector from "./StageSelector";
 import StageChecklist from "./StageChecklist";
 import SitePicker from "./SitePicker";
 import UploadForm from "./UploadForm";
 import NotesEditor from "./NotesEditor";
+import ScriptEditor from "./ScriptEditor";
+import GenerateScriptButton from "./GenerateScriptButton";
 import DeleteButton from "./DeleteButton";
 import PublishForm from "./PublishForm";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-const PALETTE = [
-  { label: "Deep blue", color: "#1f3a52" },
-  { label: "Soft moss green", color: "#4f6b52" },
-  { label: "Warm amber glow", color: "#c9903f" },
-];
-
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const projects = await getProjects();
   const project = projects.find((p) => p.slug === params.slug);
   if (!project) notFound();
 
+  const channel = getChannel(project.channel);
   const rawFootage = project.assets.filter((a) => a.kind === "raw-footage");
   const stills = project.assets.filter((a) => a.kind === "still");
   const checklistItems = STAGE_CHECKLISTS[project.stage] || [];
-  const locations = project.stage === "Location Scouted" ? await getLocations() : null;
+  const locations =
+    project.stage === "Record/Create Media" && project.channel === "jungle-nidra"
+      ? await getLocations()
+      : null;
 
   return (
     <div className="shell">
       <h1>{project.title}</h1>
       <p style={{ color: "var(--text-dim)" }}>
-        Slug: <code>{project.slug}</code> — matches the package/script files in{" "}
-        <code>02-packaging/</code> and <code>03-scripts/</code> if this video went through{" "}
-        <code>/jn-production-line</code>.
+        Channel: <strong>{channel.name}</strong> &nbsp;·&nbsp; Slug: <code>{project.slug}</code>{" "}
+        — matches the package/script files in <code>02-packaging/</code> and{" "}
+        <code>03-scripts/</code> if this video went through <code>/jn-production-line</code>.
       </p>
 
       <h2>Current stage: {project.stage}</h2>
@@ -64,18 +65,46 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
       <h2>Brand reference</h2>
       <div className="card">
-        <div className="swatches" style={{ margin: 0 }}>
-          {PALETTE.map((p) => (
-            <div className="swatch" key={p.label}>
-              <div className="swatch-color" style={{ background: p.color }} />
-              <div className="swatch-label">{p.label}</div>
-            </div>
-          ))}
-        </div>
+        {channel.brand.palette.length === 0 ? (
+          <p style={{ margin: 0, fontSize: 13, color: "var(--text-dim)" }}>
+            No brand palette set yet for {channel.name}.
+          </p>
+        ) : (
+          <div className="swatches" style={{ margin: 0 }}>
+            {channel.brand.palette.map((p) => (
+              <div className="swatch" key={p.label}>
+                <div className="swatch-color" style={{ background: p.color }} />
+                <div className="swatch-label">
+                  {p.label}
+                  {p.usage ? ` (${p.usage})` : ""}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <p style={{ marginTop: 14, marginBottom: 0, fontSize: 13 }}>
-          No face, no name, no cross-brand references. Full details: <a href="/brand">Brand guide</a>.
+          {channel.identity.anonymityRules || channel.brand.imageryNotes}
+          {channel.slug === "jungle-nidra" && (
+            <>
+              {" "}
+              Full details: <a href="/brand">Brand guide</a>.
+            </>
+          )}
         </p>
+        {channel.brand.typography && (
+          <p style={{ marginTop: 8, marginBottom: 0, fontSize: 13, color: "var(--text-dim)" }}>
+            Type: {channel.brand.typography}
+          </p>
+        )}
       </div>
+
+      {project.stage === "Script Generated" && (
+        <>
+          <h2>Script</h2>
+          <GenerateScriptButton slug={project.slug} />
+          <ScriptEditor slug={project.slug} script={project.script} />
+        </>
+      )}
 
       <h2>Upload</h2>
       <UploadForm slug={project.slug} />

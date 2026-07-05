@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CHANNELS } from "../../lib/channels";
 
-export default function CreateProjectForm() {
+export default function CreateProjectForm({ activeChannel }: { activeChannel: string }) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [targetDay, setTargetDay] = useState("");
+  const [channel, setChannel] = useState(activeChannel);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +19,7 @@ export default function CreateProjectForm() {
     const res = await fetch("/api/projects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, targetDay }),
+      body: JSON.stringify({ title, targetDay, channel }),
     });
     setLoading(false);
     if (!res.ok) {
@@ -52,6 +54,23 @@ export default function CreateProjectForm() {
             color: "var(--text)",
           }}
         />
+        <select
+          value={channel}
+          onChange={(e) => setChannel(e.target.value)}
+          style={{
+            padding: "8px 10px",
+            borderRadius: 6,
+            border: "1px solid var(--border)",
+            background: "var(--bg)",
+            color: "var(--text)",
+          }}
+        >
+          {CHANNELS.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
         <input
           type="text"
           placeholder="Target day (optional, e.g. Tue)"

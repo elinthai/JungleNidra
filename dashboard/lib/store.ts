@@ -13,8 +13,10 @@ export interface Project {
   slug: string;
   title: string;
   stage: string;
+  channel: string;
   targetDay?: string;
   notes?: string;
+  script?: string;
   assets: Asset[];
   publishUrl?: string;
   publishedAt?: string;
@@ -26,21 +28,18 @@ export interface Project {
 
 const PROJECTS_PATH = "data/projects.json";
 
+// One 10-stage pipeline shared by every channel.
 export const STAGES = [
   "Idea",
-  "Packaged",
-  "Scripted",
-  "Location Scouted",
-  "Filmed",
-  "Voice Recorded",
-  "Assembled",
-  "Soundscape Added",
-  "QC Reviewed",
-  "Exported",
-  "Repurposing",
-  "Uploaded",
-  "Scheduled/Live",
-  "Performance Reviewed",
+  "Script Generated",
+  "Authenticity Check",
+  "Record/Create Media",
+  "Insert Media",
+  "Add Voiced Script",
+  "Thumbnail + Title",
+  "Export",
+  "Review",
+  "Publish to YouTube",
 ];
 
 export function stageIndex(stage: string): number {
@@ -70,80 +69,51 @@ export interface StageChecklistItem {
 
 export const STAGE_CHECKLISTS: Record<string, StageChecklistItem[]> = {
   Idea: [
-    { id: "run-idea-finder", text: "Run /jn-video-idea-finder (or note the winning idea/theme)" },
-    { id: "save-idea", text: "Save the idea/shortlist to 01-ideas/" },
+    { id: "seed-written", text: "Seed idea/prompt written down" },
+    { id: "seed-saved", text: "Seed saved to the project (title or notes)" },
   ],
-  Packaged: [
-    { id: "run-packaging", text: "Run /jn-production-line packaging step (title/thumbnail/opening lines)" },
-    { id: "approve-packaging", text: "Approve the packaging output" },
-    { id: "save-packaging", text: "Saved to 02-packaging/titles, thumbnails, intros" },
+  "Script Generated": [
+    { id: "script-generated", text: "Script generated (via the Generate script button, or written manually) from the seed" },
+    { id: "script-reviewed", text: "First draft read through and edited for accuracy/tone" },
   ],
-  Scripted: [
-    { id: "generate-script", text: "Full script generated via /jn-production-line" },
-    { id: "save-script", text: "Script saved to 03-scripts/[slug].md" },
-    { id: "approve-script", text: "Script approved" },
+  "Authenticity Check": [
+    { id: "materially-varied", text: "Script/theme is materially varied from this channel's other videos — not a reskinned template (YouTube inauthentic-content policy)" },
+    { id: "authentic-insight", text: "Adds this channel's own authentic framing, not a generic AI-template feel" },
+    { id: "not-reused-reading", text: "Not exclusively a reading/reuse of material not originally created for this channel" },
+    { id: "disclosure-check", text: "Considered whether the \"Altered or synthetic content\" disclosure toggle applies (usually not — script/narration generation is exempted) and noted the call" },
+    { id: "intro-outro-ok", text: "Confirmed: same intro/outro reuse is fine, but this video's bulk content differs from prior uploads" },
   ],
-  "Location Scouted": [
-    { id: "pick-category", text: "Pick location category matching the approved thumbnail concept" },
-    { id: "gear-ready", text: "Gear ready: iPhone 15, lapel mic, tripod, gimbal" },
+  "Record/Create Media": [
+    { id: "plan-decided", text: "Location, set, or generation approach decided" },
+    { id: "media-captured", text: "Media recorded (b-roll/on-camera) or generated" },
+    { id: "quality-check", text: "Reviewed footage/visuals for quality and continuity" },
   ],
-  Filmed: [
-    { id: "camera-settings", text: "4K at 24fps (or 30fps, stay consistent), exposure locked" },
-    { id: "lens-clean", text: "Lens cleaned before shooting" },
-    { id: "four-shot-set", text: "4-shot set per site: wide establishing, slow push-in, static detail, slow pan/glide" },
-    { id: "no-people", text: "No people/faces/identifiable landmarks in any clip" },
-    { id: "soft-light", text: "Shot during soft light (early morning/late afternoon) where possible" },
-    { id: "save-footage", text: "Raw footage saved to 04-recording-assets/raw-footage/[site-name]/" },
+  "Insert Media": [
+    { id: "media-uploaded", text: "Media uploaded into the project" },
+    { id: "media-organized", text: "Assets reviewed and organized (correct kind/site/labels)" },
   ],
-  "Voice Recorded": [
-    { id: "voice-clone", text: "Using cloned voice already uploaded to ElevenLabs" },
-    { id: "voice-settings", text: "Speed low, Stability ~80-90%, Style ~0-15%, Similarity ~75%+" },
-    { id: "generate-chunks", text: "Script generated in chunks at natural pause points (not one block)" },
-    { id: "save-audio", text: "Narration saved to 04-recording-assets/audio/[slug]/narration/, numbered in order" },
+  "Add Voiced Script": [
+    { id: "narration-recorded", text: "Narration recorded — real voice or ElevenLabs clone, per this channel's voice type" },
+    { id: "narration-synced", text: "Narration laid over/synced with the media" },
   ],
-  Assembled: [
-    { id: "capcut-project", text: "CapCut project started at Export-stage settings" },
-    { id: "track-stack", text: "Track stack built: b-roll video, narration audio, soundscape audio (in that order)" },
-    { id: "silence-gaps", text: "1.5-2s silence between sentences, 4-6s between major beats" },
-    { id: "broll-cuts", text: "B-roll laid under narration, slow cuts only (~every 15-20s+)" },
+  "Thumbnail + Title": [
+    { id: "title-finalized", text: "Title finalized" },
+    { id: "thumbnail-built", text: "Thumbnail built using this channel's brand palette/imagery" },
+    { id: "brand-check", text: "Both checked against this channel's brand guardrails" },
   ],
-  "Soundscape Added": [
-    { id: "layer-soundscape", text: "Ambient soundscape layered under narration + into the silent tail" },
-    { id: "midroll-ads", text: "Mid-roll ad placement (if applicable) — only within spoken portion" },
-    { id: "thumbnail-built", text: "Final thumbnail image built from the approved concept" },
+  Export: [
+    { id: "export-settings", text: "Export settings correct (resolution/format/audio)" },
+    { id: "export-saved", text: "Final export file saved" },
   ],
-  "QC Reviewed": [
-    { id: "watch-full", text: "Watch/listen to the full edit start to finish" },
-    { id: "opening-settles", text: "Opening 60-90 seconds actually settles the listener (jn-settings Task 1)" },
+  Review: [
+    { id: "full-watch", text: "Full watch-through by a human before publishing" },
+    { id: "opening-check", text: "Opening segment checked (hook/settle, per channel style)" },
+    { id: "compliance-recheck", text: "Authenticity/compliance re-confirmed if anything changed since the gate" },
   ],
-  Exported: [
-    { id: "export-format", text: "Format: MP4 (H.264)" },
-    { id: "export-resolution", text: "Resolution: 4K (or 1080p), matching capture" },
-    { id: "export-framerate", text: "Frame rate matches capture rate (24fps or 30fps)" },
-    { id: "export-audio", text: "Audio: AAC, 48kHz, stereo" },
-    { id: "save-export", text: "Final export + thumbnail saved, file location noted" },
-  ],
-  Repurposing: [
-    { id: "run-repurposing", text: "Run /jn-repurposing using raw footage/stills + the approved script" },
-    { id: "feeder-reel", text: "One feeder reel produced, bridging to the long-form upload" },
-    { id: "standalone-shorts", text: "1-2 standalone Shorts/Reels cut" },
-    { id: "save-repurposing", text: "Saved to 07-repurposing/feeder-reels and /shorts" },
-  ],
-  Uploaded: [
-    { id: "run-settings", text: "Run /jn-settings post-upload checklist" },
-    { id: "seo-description", text: "SEO description written" },
-    { id: "pinned-comment", text: "Pinned comment posted" },
-    { id: "keep-private", text: "Kept Private for 24-48 hours before going live" },
-  ],
-  "Scheduled/Live": [
-    { id: "set-publish-date", text: "Scheduled publish date/time set" },
-    { id: "confirm-live", text: "Flipped to Public / confirmed live" },
-  ],
-  "Performance Reviewed": [
-    { id: "wait-analytics", text: "Waited 48+ hrs for analytics (CTR, retention, impressions)" },
-    { id: "run-optimization", text: "Run /jn-launch-optimization" },
-    { id: "save-review", text: "Diagnosis saved to 06-performance-review/" },
-    { id: "loop-note", text: "Loop-note lesson fed back into the next video's packaging" },
+  "Publish to YouTube": [
+    { id: "uploaded-youtube", text: "Uploaded to YouTube" },
+    { id: "scheduled-or-live", text: "Scheduled or published live" },
+    { id: "url-recorded", text: "Publish URL recorded" },
   ],
 };
 
@@ -153,8 +123,10 @@ export function isStageComplete(project: Project, stage: string): boolean {
   const done = project.completedSteps[stage] || [];
   const allChecked = items.every((item) => done.includes(item.id));
   if (!allChecked) return false;
-  if (stage === "Location Scouted") return (project.scoutedSites?.length ?? 0) > 0;
-  if (stage === "Scheduled/Live") return !!project.targetDay;
+  if (stage === "Record/Create Media" && project.channel === "jungle-nidra") {
+    return (project.scoutedSites?.length ?? 0) > 0;
+  }
+  if (stage === "Publish to YouTube") return !!project.targetDay;
   return true;
 }
 
@@ -177,10 +149,10 @@ export function getOpenSteps(projects: Project[]): OpenStep[] {
         steps.push({ slug: project.slug, title: project.title, stage, text: item.text });
       }
     }
-    if (stage === "Location Scouted" && (project.scoutedSites?.length ?? 0) === 0) {
+    if (stage === "Record/Create Media" && project.channel === "jungle-nidra" && (project.scoutedSites?.length ?? 0) === 0) {
       steps.push({ slug: project.slug, title: project.title, stage, text: "Pick site(s) from the location library" });
     }
-    if (stage === "Scheduled/Live" && !project.targetDay) {
+    if (stage === "Publish to YouTube" && !project.targetDay) {
       steps.push({ slug: project.slug, title: project.title, stage, text: "Set a target publish day" });
     }
   }

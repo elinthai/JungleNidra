@@ -1,19 +1,25 @@
 import { getProjects } from "../../lib/store";
+import { getActiveChannel } from "../../lib/activeChannel";
+import { getChannel } from "../../lib/channels";
 
 export const dynamic = "force-dynamic";
 
 function stageBadgeClass(stage: string): string {
-  const slug = stage.trim().toLowerCase().replace(/\s+/g, "-");
+  const slug = stage.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   return `badge stage-${slug}`;
 }
 
 export default async function CalendarPage() {
+  const activeChannel = getActiveChannel();
+  const channel = getChannel(activeChannel);
   const projects = await getProjects();
-  const sorted = [...projects].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const sorted = [...projects]
+    .filter((p) => p.channel === activeChannel)
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
   return (
     <div className="shell">
-      <h1>Content Calendar</h1>
+      <h1>Content Calendar — {channel.name}</h1>
       <p>
         Live view of every project&apos;s stage — same data as{" "}
         <a href="/projects">/projects</a>, table-formatted. This is the one real record;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../lib/auth";
 import { getProjects, saveProjects, slugify, Project } from "../../../lib/store";
+import { CHANNELS } from "../../../lib/channels";
 
 export async function GET() {
   const session = await auth();
@@ -17,6 +18,8 @@ export async function POST(request: NextRequest) {
   const slug = slugify(String(body.slug || body.title || ""));
   if (!slug) return NextResponse.json({ error: "title or slug required" }, { status: 400 });
 
+  const channel = CHANNELS.some((c) => c.slug === body.channel) ? body.channel : CHANNELS[0].slug;
+
   const projects = await getProjects();
   if (projects.some((p) => p.slug === slug)) {
     return NextResponse.json({ error: "a project with this slug already exists" }, { status: 409 });
@@ -27,6 +30,7 @@ export async function POST(request: NextRequest) {
     slug,
     title: String(body.title || slug),
     stage: "Idea",
+    channel,
     targetDay: body.targetDay ? String(body.targetDay) : undefined,
     notes: body.notes ? String(body.notes) : undefined,
     assets: [],

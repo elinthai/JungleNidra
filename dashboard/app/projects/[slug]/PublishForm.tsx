@@ -79,7 +79,7 @@ export default function PublishForm({
       <h3 style={{ marginTop: 0 }}>Publish</h3>
       <p style={{ fontSize: 13, marginTop: 0 }}>
         Once this video is live on YouTube, paste the link here — sets the stage to
-        &quot;Uploaded&quot; automatically.
+        &quot;Publish to YouTube&quot; automatically.
       </p>
       <div style={{ display: "flex", gap: 10 }}>
         <input
