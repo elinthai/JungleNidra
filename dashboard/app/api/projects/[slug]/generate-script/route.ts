@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { auth } from "../../../../../lib/auth";
-import { getProjects, saveProjects } from "../../../../../lib/store";
+import { getProjects, saveProjects, stageIndex } from "../../../../../lib/store";
 import { getChannel } from "../../../../../lib/channels";
+import { readContentFile } from "../../../../../lib/content";
 
 export async function POST(_req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await auth();
@@ -14,21 +15,26 @@ export async function POST(_req: NextRequest, { params }: { params: { slug: stri
 
   const project = projects[idx];
   const channel = getChannel(project.channel);
+  const isJungleNidra = channel.slug === "jungle-nidra";
 
-  const systemPrompt = [
-    `You write scripts for the "${channel.name}" YouTube channel.`,
-    channel.identity.anonymityRules ? `Identity guardrail: ${channel.identity.anonymityRules}` : null,
-    channel.voice.type === "elevenlabs-cloned"
-      ? "Narration will be read aloud by a cloned voice via ElevenLabs — write for a calm, steady, spoken delivery, not for reading on a page."
-      : channel.voice.type === "live-on-camera"
-        ? "This will be delivered live on camera — write in a natural spoken voice."
-        : "Voice/delivery style for this channel is not yet defined — write in a clear, calm spoken voice as a safe default.",
-    channel.voice.notes || null,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const systemPrompt = isJungleNidra
+    ? readContentFile("skills/jn-scriptwriter.md")
+    : [
+        `You write scripts for the "${channel.name}" YouTube channel.`,
+        channel.identity.anonymityRules ? `Identity guardrail: ${channel.identity.anonymityRules}` : null,
+        channel.voice.type === "elevenlabs-cloned"
+          ? "Narration will be read aloud by a cloned voice via ElevenLabs — write for a calm, steady, spoken delivery, not for reading on a page."
+          : channel.voice.type === "live-on-camera"
+            ? "This will be delivered live on camera — write in a natural spoken voice."
+            : "Voice/delivery style for this channel is not yet defined — write in a clear, calm spoken voice as a safe default.",
+        channel.voice.notes || null,
+      ]
+        .filter(Boolean)
+        .join("\n");
 
-  const seed = [project.title, project.notes].filter(Boolean).join("\n\n");
+  const seed = isJungleNidra
+    ? [project.title, project.thumbnailConcept, project.openingLines, project.notes].filter(Boolean).join("\n\n")
+    : [project.title, project.notes].filter(Boolean).join("\n\n");
   if (!seed.trim()) {
     return NextResponse.json({ error: "add a title or notes before generating a script" }, { status: 400 });
   }
@@ -50,6 +56,12 @@ export async function POST(_req: NextRequest, { params }: { params: { slug: stri
   }
 
   project.script = text;
+  if (stageIndex(project.stage) < stageIndex("Script Generated")) {
+    project.stage = "Script Generated";
+  }
+  const done = new Set(project.completedSteps["Script Generated"] || []);
+  done.add("script-generated");
+  project.completedSteps["Script Generated"] = Array.from(done);
   project.updatedAt = new Date().toISOString();
   projects[idx] = project;
   await saveProjects(projects);

@@ -17,6 +17,10 @@ export interface Project {
   targetDay?: string;
   notes?: string;
   script?: string;
+  titleOptions?: string[];
+  thumbnailConcept?: string;
+  openingLines?: string;
+  packageStatus?: "draft" | "approved";
   assets: Asset[];
   publishUrl?: string;
   publishedAt?: string;

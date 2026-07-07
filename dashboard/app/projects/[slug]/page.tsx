@@ -7,6 +7,7 @@ import UploadForm from "./UploadForm";
 import NotesEditor from "./NotesEditor";
 import ScriptEditor from "./ScriptEditor";
 import GenerateScriptButton from "./GenerateScriptButton";
+import PackageDraft from "./PackageDraft";
 import DeleteButton from "./DeleteButton";
 import PublishForm from "./PublishForm";
 import { notFound } from "next/navigation";
@@ -97,6 +98,20 @@ export default async function ProjectPage({ params }: { params: { slug: string }
           </p>
         )}
       </div>
+
+      {channel.slug === "jungle-nidra" &&
+        (project.stage === "Idea" || project.packageStatus) && (
+          <>
+            <h2>Package</h2>
+            <PackageDraft
+              slug={project.slug}
+              titleOptions={project.titleOptions}
+              thumbnailConcept={project.thumbnailConcept}
+              openingLines={project.openingLines}
+              packageStatus={project.packageStatus}
+            />
+          </>
+        )}
 
       {project.stage === "Script Generated" && (
         <>

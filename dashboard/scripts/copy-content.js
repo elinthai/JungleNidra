@@ -15,6 +15,18 @@ const files = [
   { src: "SOP.md", dest: "sop.md" },
   { src: "PRODUCTION-SOP.md", dest: "production-sop.md" },
   { src: path.join("brand-assets", "brand-guide.md"), dest: "brand-guide.md" },
+  {
+    src: path.join("jn_skills", "jn-holy-trifecta", "SKILL.md"),
+    dest: path.join("skills", "jn-holy-trifecta.md"),
+  },
+  {
+    src: path.join("jn_skills", "jn-scriptwriter", "SKILL.md"),
+    dest: path.join("skills", "jn-scriptwriter.md"),
+  },
+  {
+    src: path.join("jn_skills", "jn-research-agent", "SKILL.md"),
+    dest: path.join("skills", "jn-research-agent.md"),
+  },
 ];
 
 fs.mkdirSync(contentDir, { recursive: true });
@@ -26,6 +38,7 @@ for (const file of files) {
     console.warn(`[copy-content] missing source file, skipping: ${file.src}`);
     continue;
   }
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
   fs.copyFileSync(srcPath, destPath);
   console.log(`[copy-content] copied ${file.src} -> content/${file.dest}`);
 }

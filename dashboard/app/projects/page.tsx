@@ -2,6 +2,7 @@ import { getProjects, STAGE_CHECKLISTS } from "../../lib/store";
 import { getActiveChannel } from "../../lib/activeChannel";
 import { getChannel } from "../../lib/channels";
 import CreateProjectForm from "./CreateProjectForm";
+import ResearchAgentButton from "./ResearchAgentButton";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,8 @@ export default async function ProjectsPage() {
         as they come back from the shoot. Slug matches what <code>/jn-production-line</code>{" "}
         uses for the script/package files in the repo.
       </p>
+
+      {activeChannel === "jungle-nidra" && <ResearchAgentButton />}
 
       <CreateProjectForm activeChannel={activeChannel} />
 

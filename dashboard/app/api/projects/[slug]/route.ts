@@ -25,6 +25,14 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   if (typeof body.notes === "string") project.notes = body.notes;
   if (typeof body.script === "string") project.script = body.script;
   if (typeof body.targetDay === "string") project.targetDay = body.targetDay;
+  if (Array.isArray(body.titleOptions)) {
+    project.titleOptions = body.titleOptions.map((t: unknown) => String(t));
+  }
+  if (typeof body.thumbnailConcept === "string") project.thumbnailConcept = body.thumbnailConcept;
+  if (typeof body.openingLines === "string") project.openingLines = body.openingLines;
+  if (body.packageStatus === "draft" || body.packageStatus === "approved") {
+    project.packageStatus = body.packageStatus;
+  }
   if (typeof body.publishUrl === "string") {
     if (body.publishUrl.trim()) {
       project.publishUrl = body.publishUrl.trim();
