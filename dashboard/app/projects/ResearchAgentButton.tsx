@@ -27,7 +27,7 @@ export default function ResearchAgentButton() {
     const body = await res.json().catch(() => ({}));
     setLoading(false);
     if (!res.ok) {
-      setError(body.error || "Something went wrong");
+      setError([body.error, body.detail].filter(Boolean).join(" — ") || "Something went wrong");
       return;
     }
     setCreated(body.created);

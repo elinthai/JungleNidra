@@ -57,7 +57,8 @@ export async function POST(req: NextRequest) {
       .join("\n");
   } catch (error) {
     console.error("generate-ideas failed:", error);
-    return NextResponse.json({ error: "research agent call failed" }, { status: 500 });
+    const detail = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: "research agent call failed", detail }, { status: 500 });
   }
 
   const match = reportText.match(/```ideas-json\s*([\s\S]*?)```/);
